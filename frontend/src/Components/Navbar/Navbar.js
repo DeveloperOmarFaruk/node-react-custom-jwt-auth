@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import "./Navbar.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthContext/AuthContext";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const { logout, token, user } = useContext(AuthContext);
@@ -23,7 +24,12 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
+    if (user === null) {
+    } else {
+      toast.success("Logout Successful");
+    }
     navigate(`/`);
+    window.location.reload();
   };
 
   return (
