@@ -1,12 +1,13 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { AuthContext } from "../../AuthContext/AuthContext";
 
 const Register = () => {
   const [formData, setFormData] = useState([]);
   const navigate = useNavigate();
-  const URL = `http://localhost:5000`;
+  const { register } = useContext(AuthContext);
 
   const handleRegisterChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -15,15 +16,8 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    try {
-      const res = await axios.post(`${URL}/register`, formData);
-      if (res.data) {
-        navigate(`/login`);
-        toast.success("Registration Successful");
-      }
-    } catch (err) {
-      toast.error(err);
-    }
+    await register(formData);
+    navigate(`/login`);
   };
 
   return (

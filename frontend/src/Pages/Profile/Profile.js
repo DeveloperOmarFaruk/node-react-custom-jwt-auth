@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../../AuthContext/AuthContext";
 
 const Profile = () => {
+  const { user } = useContext(AuthContext);
+
   return (
     <>
       <div className="text-center" style={{ margin: "4rem auto" }}>
-        <h3>Profile Page</h3>
+        <div>
+          <h4>{user.name}</h4>
+
+          <h6>{user.email}</h6>
+        </div>
       </div>
     </>
   );

@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./Navbar.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../AuthContext/AuthContext";
 
 const Navbar = () => {
+  const { logout, token, user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   function openNav() {
     const element = document.getElementById("mySidenav");
     if (element) {
@@ -16,6 +20,11 @@ const Navbar = () => {
       element.style.width = "0";
     }
   }
+
+  const handleLogout = () => {
+    logout();
+    navigate(`/`);
+  };
 
   return (
     <>
@@ -42,8 +51,18 @@ const Navbar = () => {
             </div>
             <div id="links">
               <NavLink to="/">Home</NavLink>
-              <NavLink to="/login">Login</NavLink>
-              <NavLink to="/register">Register</NavLink>
+              {user === "" && token === "" ? (
+                <>
+                  <NavLink to="/login">Login</NavLink>
+                </>
+              ) : (
+                <>
+                  <NavLink to="/" onClick={handleLogout}>
+                    Logout
+                  </NavLink>
+                </>
+              )}
+
               <NavLink to="/profile">Profile</NavLink>
               <NavLink to="/dashboard">Dashboard</NavLink>
             </div>
@@ -59,8 +78,17 @@ const Navbar = () => {
             &times;
           </NavLink>
           <NavLink to="/">Home</NavLink>
-          <NavLink to="/login">Login</NavLink>
-          <NavLink to="/register">Register</NavLink>
+          {user === "" && token === "" ? (
+            <>
+              <NavLink to="/login">Login</NavLink>
+            </>
+          ) : (
+            <>
+              <NavLink to="/" onClick={handleLogout}>
+                Logout
+              </NavLink>
+            </>
+          )}
           <NavLink to="/profile">Profile</NavLink>
           <NavLink to="/dashboard">Dashboard</NavLink>
         </div>

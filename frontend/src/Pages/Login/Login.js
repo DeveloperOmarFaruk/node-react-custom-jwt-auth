@@ -1,12 +1,18 @@
 import axios from "axios";
-import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import React, { useContext, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { AuthContext } from "../../AuthContext/AuthContext";
 
 const Login = () => {
   const [formData, setFormData] = useState([]);
   const navigate = useNavigate();
-  const URL = `http://localhost:5000`;
+  const { login } = useContext(AuthContext);
+  const location = useLocation();
+  const windowScroll = () => {
+    window.scrollTo(0, 0);
+    navigate(location?.state ? location.state : "/");
+  };
 
   const handleLoginChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -14,17 +20,8 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    try {
-      const res = await axios.post(`${URL}/login`, formData);
-      if (res.data) {
-        navigate(`/`);
-        toast.success(res.data);
-      }
-    } catch (err) {
-      toast.error(err);
-    }
-    console.log(formData);
+    await login(formData);
+    windowScroll();
   };
 
   return (
